@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-deployment-pipeline
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cloud-deployment-pipeline
+  template:
+    metadata:
+      labels:
+        app: cloud-deployment-pipeline
+    spec:
+      containers:
+        - name: web
+          image: mk758/cloud-deployment-pipeline:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-deployment-pipeline
+spec:
+  selector:
+    app: cloud-deployment-pipeline
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: cloud-deployment-pipeline
+spec:
+  to:
+    kind: Service
+    name: cloud-deployment-pipeline
+  port:
+    targetPort: http
