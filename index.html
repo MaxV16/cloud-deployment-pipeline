@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenShift CI/CD Demo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="card">
+    <span class="badge">OpenShift CI/CD Demo</span>
+    <h1>Deployed with GitHub Actions</h1>
+    <p class="subtitle">A containerised static web app running on OpenShift.</p>
+
+    <div class="status">
+      <div class="status-row">
+        <span class="label">Served by pod</span>
+        <span class="value" id="hostname">loading...</span>
+      </div>
+      <div class="status-row">
+        <span class="label">App version</span>
+        <span class="value" id="version">-</span>
+      </div>
+    </div>
+
+    <button id="ping" type="button">Ping the pod</button>
+    <p class="hint" id="hint">
+      Refresh a few times. The pod name changes as requests are load-balanced.
+    </p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
