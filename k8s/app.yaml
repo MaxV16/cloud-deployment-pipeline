@@ -60,3 +60,6 @@ spec:
     name: cloud-deployment-pipeline
   port:
     targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
