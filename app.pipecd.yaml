@@ -1,0 +1,22 @@
+apiVersion: pipecd.dev/v1beta1
+kind: KubernetesApp
+spec:
+  name: cloud-deployment-pipeline
+  labels:
+    env: production
+  input:
+    manifests:
+      - k8s/app.yaml
+    namespace: apricot145-dev
+  eventWatcher:
+    - matcher:
+        name: image-update
+        labels:
+          app: cloud-deployment-pipeline
+          env: production
+      handler:
+        type: GIT_UPDATE
+        config:
+          replacements:
+            - file: k8s/app.yaml
+              yamlField: $.spec.template.spec.containers[0].image
