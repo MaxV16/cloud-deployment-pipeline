@@ -2,7 +2,6 @@ apiVersion: pipecd.dev/v1beta1
 kind: KubernetesApp
 spec:
   name: cloud-deployment-pipeline
-  platformProvider: openshift
   labels:
     env: production
   input:
