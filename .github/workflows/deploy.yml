@@ -8,6 +8,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'set by Event')"
 
     steps:
       - name: checkout
@@ -38,5 +39,3 @@ jobs:
           pipectl-version: v0.51.0
           labels: app=cloud-deployment-pipeline,env=production
           data: mk758/cloud-deployment-pipeline:${{ github.sha }}
-          commit-hash: ${{ github.sha }}
-          commit-url: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
