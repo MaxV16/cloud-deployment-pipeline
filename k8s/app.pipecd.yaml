@@ -2,11 +2,12 @@ apiVersion: pipecd.dev/v1beta1
 kind: KubernetesApp
 spec:
   name: cloud-deployment-pipeline
+  platformProvider: openshift
   labels:
     env: production
   input:
     manifests:
-      - k8s/app.yaml
+      - app.yaml
     namespace: apricot146-dev
   eventWatcher:
     - matcher:
@@ -18,5 +19,5 @@ spec:
         type: GIT_UPDATE
         config:
           replacements:
-            - file: k8s/app.yaml
+            - file: app.yaml
               yamlField: $.spec.template.spec.containers[0].image

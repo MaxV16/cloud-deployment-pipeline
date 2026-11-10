@@ -5,9 +5,12 @@
 .oc-token
 *.token
 
-# piped deploy key
+# piped deploy key and local config
 piped-ssh-key
 piped-ssh-key.pub
+piped/piped-id
+piped/piped-key
+piped/piped-config.yaml
 
 # env files
 .env

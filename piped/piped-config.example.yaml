@@ -8,13 +8,13 @@ spec:
   pipedKeyFile: /etc/piped-secret/piped-key
   apiAddress: REPLACE_WITH_CONTROL_PLANE_HOST:443
   syncInterval: 1m
+  git:
+    sshKeyFile: /etc/piped-secret/ssh-key
   repositories:
-    - repoID: cloud-deployment-pipeline
+    - repoId: cloud-deployment-pipeline
       # ssh, not https: piped has to push the image-update commit back to the repo
       remote: git@github.com:MaxV16/cloud-deployment-pipeline.git
       branch: master
-      sshConfig:
-        sshKeyFile: /etc/piped-secret/ssh-key
   platformProviders:
     - name: openshift
       type: KUBERNETES
