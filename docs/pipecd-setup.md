@@ -41,6 +41,26 @@ kubectl create secret generic piped-secret \
   -n pipecd
 ```
 
+piped also needs to push commits back to the repo (the `GIT_UPDATE` handler writes the new
+image tag into `k8s/app.yaml`), so give it an ssh deploy key with write access:
+
+```bash
+ssh-keygen -t ed25519 -f ./piped-ssh-key -N ""
+```
+
+add `piped-ssh-key.pub` as a deploy key on the github repo (allow write access), then add the
+private key to the same secret:
+
+```bash
+kubectl create secret generic piped-secret \
+  --from-file=piped-key=./piped-key \
+  --from-file=ssh-key=./piped-ssh-key \
+  -n pipecd
+```
+
+make sure `master` is not protected against pushes from that deploy key, otherwise piped cannot
+commit the image update.
+
 ## 3. install piped on openshift
 
 the sandbox runs containers with an arbitrary uid, so use the okd variant of the piped image. it uses `nss_wrapper` to deal with the random uid instead of needing root.
@@ -53,6 +73,23 @@ check that it came up:
 oc get pods -n pipecd
 oc logs deployment/piped -n pipecd
 ```
+
+## 3b. grant piped access to the app namespace
+
+piped runs in the `pipecd` namespace but deploys into `apricot145-dev`, so it needs RBAC there.
+the simplest option is a role binding to the service account the chart created:
+
+```bash
+oc create rolebinding piped-deployer \
+  --clusterrole=edit \
+  --serviceaccount=pipecd:piped \
+  -n apricot145-dev
+```
+
+(the service account name depends on the chart values; check with
+`oc get sa -n pipecd`.) the `edit` role is enough for deployment/service/route objects.
+if the sandbox does not let you bind a clusterrole, create a namespace role that grants
+`get/list/watch/create/update/patch/delete` on those resources instead.
 
 ## 4. add the application
 

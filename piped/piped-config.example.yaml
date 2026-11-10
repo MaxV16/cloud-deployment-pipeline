@@ -10,8 +10,11 @@ spec:
   syncInterval: 1m
   repositories:
     - repoID: cloud-deployment-pipeline
-      remote: https://github.com/MaxV16/cloud-deployment-pipeline.git
+      # ssh, not https: piped has to push the image-update commit back to the repo
+      remote: git@github.com:MaxV16/cloud-deployment-pipeline.git
       branch: master
+      sshConfig:
+        sshKeyFile: /etc/piped-secret/ssh-key
   platformProviders:
     - name: openshift
       type: KUBERNETES

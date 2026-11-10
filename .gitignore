@@ -1,0 +1,14 @@
+# local tooling
+.opencode/
+
+# openshift login token, never commit
+.oc-token
+*.token
+
+# piped deploy key
+piped-ssh-key
+piped-ssh-key.pub
+
+# env files
+.env
+.env.*
