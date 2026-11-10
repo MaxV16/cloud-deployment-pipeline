@@ -7,7 +7,7 @@ spec:
   input:
     manifests:
       - k8s/app.yaml
-    namespace: apricot145-dev
+    namespace: apricot146-dev
   eventWatcher:
     - matcher:
         name: image-update

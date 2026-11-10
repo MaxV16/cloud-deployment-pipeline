@@ -20,7 +20,7 @@ spec:
       type: KUBERNETES
       config:
         appStateInformer:
-          namespace: apricot145-dev
+          namespace: apricot146-dev
   eventWatcher:
     checkInterval: 1m
     gitRepos:

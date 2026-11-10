@@ -76,14 +76,14 @@ oc logs deployment/piped -n pipecd
 
 ## 3b. grant piped access to the app namespace
 
-piped runs in the `pipecd` namespace but deploys into `apricot145-dev`, so it needs RBAC there.
+piped runs in the `pipecd` namespace but deploys into `apricot146-dev`, so it needs RBAC there.
 the simplest option is a role binding to the service account the chart created:
 
 ```bash
 oc create rolebinding piped-deployer \
   --clusterrole=edit \
   --serviceaccount=pipecd:piped \
-  -n apricot145-dev
+  -n apricot146-dev
 ```
 
 (the service account name depends on the chart values; check with
