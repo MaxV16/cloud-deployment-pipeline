@@ -34,6 +34,7 @@ jobs:
           api-address: ${{ secrets.PIPECD_API_ADDRESS }}
           api-key: ${{ secrets.PIPECD_API_KEY }}
           event-name: image-update
+          pipectl-version: v0.56.0
           labels: app=cloud-deployment-pipeline,env=production
           data: mk758/cloud-deployment-pipeline:${{ github.sha }}
           commit-hash: ${{ github.sha }}
