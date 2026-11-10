@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: mk758/cloud-deployment-pipeline:2e2d76f9859f25a1f7dcdd93f56150346fbac979
+          image: mk758/cloud-deployment-pipeline:8c9a428ffcc734be62ca048347e2bd3f6927c6fd
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
