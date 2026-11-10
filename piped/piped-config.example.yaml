@@ -1,0 +1,24 @@
+# example piped configuration for the openshift sandbox
+# copy this file, fill in the values from your pipecd project, then install piped with it
+apiVersion: pipecd.dev/v1beta1
+kind: Piped
+spec:
+  projectID: REPLACE_WITH_PROJECT_ID
+  pipedID: REPLACE_WITH_PIPED_ID
+  pipedKeyFile: /etc/piped-secret/piped-key
+  apiAddress: REPLACE_WITH_CONTROL_PLANE_HOST:443
+  syncInterval: 1m
+  repositories:
+    - repoID: cloud-deployment-pipeline
+      remote: https://github.com/MaxV16/cloud-deployment-pipeline.git
+      branch: master
+  platformProviders:
+    - name: openshift
+      type: KUBERNETES
+      config:
+        appStateInformer:
+          namespace: apricot145-dev
+  eventWatcher:
+    checkInterval: 1m
+    gitRepos:
+      - repoId: cloud-deployment-pipeline
