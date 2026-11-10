@@ -29,6 +29,7 @@ jobs:
             mk758/cloud-deployment-pipeline:${{ github.sha }}
 
       - name: register image update with pipecd
+        continue-on-error: true
         uses: pipe-cd/actions-event-register@v1
         with:
           api-address: ${{ secrets.PIPECD_API_ADDRESS }}
