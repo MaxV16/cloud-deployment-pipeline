@@ -14,7 +14,7 @@ the `commit-hash` and `commit-url` fields are what make the deployment trace wor
 
 ## 1. install the control plane
 
-follow the pipecd quickstart to install the control plane and the `pipectl` cli. the control plane does not have to run on the same cluster as the app.
+follow the pipecd quickstart to install the control plane and the `pipectl` cli. the control plane does not have to run on the same cluster as the app, but in the developer sandbox it ends up in the same project (`apricot146-dev`) because the sandbox only allows one.
 
 ```bash
 pipectl version
@@ -38,7 +38,7 @@ this returns a piped id and a key. save the key to a file and create the kuberne
 ```bash
 kubectl create secret generic piped-secret \
   --from-file=piped-key=./piped-key \
-  -n pipecd
+  -n apricot146-dev
 ```
 
 piped also needs to push commits back to the repo (the `GIT_UPDATE` handler writes the new
@@ -55,7 +55,7 @@ private key to the same secret:
 kubectl create secret generic piped-secret \
   --from-file=piped-key=./piped-key \
   --from-file=ssh-key=./piped-ssh-key \
-  -n pipecd
+  -n apricot146-dev
 ```
 
 make sure `master` is not protected against pushes from that deploy key, otherwise piped cannot
@@ -70,30 +70,30 @@ copy `piped/piped-config.example.yaml`, fill in `projectID`, `pipedID` and `apiA
 check that it came up:
 
 ```bash
-oc get pods -n pipecd
-oc logs deployment/piped -n pipecd
+oc get pods -n apricot146-dev
+oc logs deployment/piped -n apricot146-dev
 ```
 
 ## 3b. grant piped access to the app namespace
 
-piped runs in the `pipecd` namespace but deploys into `apricot146-dev`, so it needs RBAC there.
+piped runs in `apricot146-dev` (the sandbox only gives me one project, so the control plane, piped and the app all share it), so it needs RBAC in that namespace.
 the simplest option is a role binding to the service account the chart created:
 
 ```bash
 oc create rolebinding piped-deployer \
   --clusterrole=edit \
-  --serviceaccount=pipecd:piped \
+  --serviceaccount=apricot146-dev:piped \
   -n apricot146-dev
 ```
 
 (the service account name depends on the chart values; check with
-`oc get sa -n pipecd`.) the `edit` role is enough for deployment/service/route objects.
+`oc get sa -n apricot146-dev`.) the `edit` role is enough for deployment/service/route objects.
 if the sandbox does not let you bind a clusterrole, create a namespace role that grants
 `get/list/watch/create/update/patch/delete` on those resources instead.
 
 ## 4. add the application
 
-the application config is `app.pipecd.yaml` in the repo root. it tells piped which manifests to apply and how to handle the image update event.
+the application config is `k8s/app.pipecd.yaml`. it tells piped which manifests to apply and how to handle the image update event.
 
 ```bash
 pipectl app add \
